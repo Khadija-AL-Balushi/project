@@ -1,3 +1,6 @@
+
+
+
 function checkForName(inputText) {
     console.log("::: Running checkForName :::", inputText);
     let names = [
@@ -9,11 +12,24 @@ function checkForName(inputText) {
     ];
 
     if(names.includes(inputText)) {
-        alert("Welcome, Captain!");
+        return("Welcome, Captain!");
     }
     else {
-        alert("Enter a valid captain name");
+        return("Enter a valid captain name");
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export { checkForName };
