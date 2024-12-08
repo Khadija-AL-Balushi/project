@@ -8,7 +8,7 @@ const serverURL = 'https://localhost:9000/api';
 const form = document.getElementById('urlForm');
 form?.addEventListener('submit', handleSubmit);
 
-
+// Checks if input is a valid URL using a regex, return true if it is valid and false if not
 function ValidateUrl(inputText) {
     console.log("::: Validating :::", inputText);
     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -40,11 +40,13 @@ async function handleSubmit(event) {
     //document.getElementById('results').innerHTML = checkForName(formText);
 
 
-    // Check if the URL is valid
+    // Check if the input is valid using ValidateUrl function, if it is a valid url, a request is sent to api server 
+    // using the entry point sentiment and changes the vlaue of element "results" to the received response (the score of the article or error)
+    // Else,  if the input is not a valid url,the value of element "results" is changed to "URL INVALID"
     try {
       if (ValidateUrl(formText)) {
         
-        //  block of code to be executed if the condition is true
+                // If the URL is valid, send it to the server using the serverURL constant above
         const response = await fetch("http://localhost:9000/sentiment", {
             method: "POST",
             body: JSON.stringify({
@@ -60,15 +62,7 @@ async function handleSubmit(event) {
           }))
           .then(({ status, body }) => document.getElementById('results').innerHTML = body.score)
           .catch(error => console.log('error', error));
-          
-        // console.log(response)  
-          // (async response => ({
-          //   status: response.status, 
-          //   body: await response.json()
-          // })).then(({ status, body }) => console.log(body.score_tag));
-          // then(response => response.json())
-          // .then(response => document.getElementById('results').innerHTML = response);
-          
+        
         
 
         } else {
@@ -76,14 +70,14 @@ async function handleSubmit(event) {
         document.getElementById('results').innerHTML = "URL INVALID";
         }
       }  
-        // If the URL is valid, send it to the server using the serverURL constant above
+
     catch(err) {
       document.getElementById('results').innerHTML  = err.message;
         }
       
 }
 
-// Function to send data to the server
+
 
 // Export the handleSubmit function
 export { handleSubmit };

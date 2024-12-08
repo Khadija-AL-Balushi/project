@@ -13,18 +13,23 @@ app.use(bodyParser.json());
 app.use(express.static('dist'))
 console.log(__dirname);
 
-// Variables for url and api key
+
 
 app.get('/', function (req, res) {
     res.sendFile('dist/index.html')
 });
-
+// Variables for url and api key
 apiKey = process.env.API_KEY;
 console.log(`Your API key is ${process.env.API_KEY}`);
+
 // POST Route
 
+// entry point sentiment receives requests from the client, extracts the url 
+// and makes a request to meaningcloud api 
 app.post('/sentiment', async (req, res) => {
   console.log('request received with Link: ' + req.body.Link) ;
+
+  // building the body of the request using api key, url and language 
   const formdata = new FormData();
   formdata.append("key", apiKey);
   formdata.append("url", req.body.Link);
@@ -42,46 +47,17 @@ app.post('/sentiment', async (req, res) => {
           status: response.status, 
           body: await response.json()
         }))
-        .then(({ status, body }) => res.send({"score":body.score_tag}))
-        .catch(error => console.log('error', error));
+        .then(({ status, body }) => res.send({"score":body.score_tag}))  // if the response comes back with a score_tag, the latter is send back to the client
+        .catch(error => console.log('error', error)); // else log the error
       
       
   }
   catch(err) {
-    res.serverError('meaningcloud can not be reached');;
+    res.serverError('meaningcloud can not be reached'); // in case the req to meaningcloud was not successful or any other problem, return this message to the client.
   }
 });
 
 
-
-
-
-
-
-
-
-
-// app.post("/api", async function (req, res) {
-//     // Extract the URL from the request body
-//     const projectData = req.body.url;
-//     console.log(`Your Data: ${projectData}`);
-
-//     // Create the API URL with the API Key and the provided URL
-//     const apiURL = `${url}key=${apiKey}&url=${projectData}&lang=en`;
-
-//     // Fetch the sentiment analysis data from the API
-//     const response = await fetch(apiURL);
-//     try {
-//         const sData = await response.json();
-//         // Send the sentiment analysis data as the response
-//         res.send(sData);
-//     } catch (error) {
-//         console.log("error", error);
-//         // Handle any errors that occur during the API request
-//         res.status(500).send({ error: "An error occurred while processing the request." });
-//     }
-
-// });
 // Designates what port the app will listen to for incoming requests
 app.listen(9000, function () {
     console.log('Example app listening on port 9000!');
