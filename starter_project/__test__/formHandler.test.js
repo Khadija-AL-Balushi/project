@@ -1,7 +1,7 @@
 import { handleSubmit } from '../src/client/js/formHandler'
 
 describe('check if function executes called with a non-url input  and changes value of result innerhtml' , () => {
-    test('It should return "Welcome, Captain!"', async () => {
+    test('It should return "URL INVALID"', async () => {
         document.body.innerHTML = `
          <section>
                 <form id="urlForm">
